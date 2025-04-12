@@ -1,8 +1,11 @@
 package sample.cafekiosk.spring.api.service.product.dto;
 
+import sample.cafekiosk.spring.domain.orderproduct.OrderProduct;
 import sample.cafekiosk.spring.domain.product.Product;
 import sample.cafekiosk.spring.domain.product.ProductSellingStatus;
 import sample.cafekiosk.spring.domain.product.ProductType;
+
+import java.util.List;
 
 public record ProductResponse(
         Long id,
@@ -21,5 +24,12 @@ public record ProductResponse(
                 product.getName(),
                 product.getPrice()
         );
+    }
+
+    public static List<ProductResponse> of(List<OrderProduct> orderProducts) {
+        return orderProducts.stream()
+                .map(OrderProduct::getProduct)
+                .map(ProductResponse::of)
+                .toList();
     }
 }
