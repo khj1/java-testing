@@ -12,4 +12,8 @@ public enum ProductType {
     BAKERY("베이커리");
 
     private final String text;
+
+    public static boolean containsStockType(ProductType type) {
+        return type == BOTTLE || type == BAKERY;
+    }
 }
