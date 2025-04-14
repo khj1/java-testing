@@ -9,8 +9,13 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import sample.cafekiosk.spring.api.controller.product.dto.request.ProductCreateRequest;
 import sample.cafekiosk.spring.api.service.product.ProductService;
+import sample.cafekiosk.spring.api.service.product.dto.ProductResponse;
 
+import java.util.List;
+
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -114,5 +119,22 @@ class ProductControllerTest {
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("상품 가격은 양수여야 합니다."))
             .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("판매 중인 상품을 조회할 수 있다.")
+    @Test
+    void getSellingProducts() throws Exception {
+        List<ProductResponse> result = List.of();
+        when(productService.getSellingProducts()).thenReturn(result);
+
+        mockMvc.perform(
+                get("/api/v1/product/selling")
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value("200"))
+            .andExpect(jsonPath("$.status").value("OK"))
+            .andExpect(jsonPath("$.message").value("OK"))
+            .andExpect(jsonPath("$.data").isArray());
     }
 }
