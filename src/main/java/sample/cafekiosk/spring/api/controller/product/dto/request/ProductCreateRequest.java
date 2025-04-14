@@ -3,7 +3,7 @@ package sample.cafekiosk.spring.api.controller.product.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import sample.cafekiosk.spring.domain.product.Product;
+import sample.cafekiosk.spring.api.service.product.dto.request.ProductCreateServiceRequest;
 import sample.cafekiosk.spring.domain.product.ProductSellingStatus;
 import sample.cafekiosk.spring.domain.product.ProductType;
 
@@ -28,13 +28,7 @@ public record ProductCreateRequest(
         return new ProductCreateRequest(type, sellingStatus, name, price);
     }
 
-    public Product toEntity(String productNumber) {
-        return Product.builder()
-            .productNumber(productNumber)
-            .type(type)
-            .sellingStatus(sellingStatus)
-            .name(name)
-            .price(price)
-            .build();
+    public ProductCreateServiceRequest toServiceRequest() {
+        return new ProductCreateServiceRequest(type, sellingStatus, name, price);
     }
 }
