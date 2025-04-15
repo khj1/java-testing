@@ -1,8 +1,6 @@
 package sample.cafekiosk.spring.api.service.product;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -29,6 +27,20 @@ class ProductServiceTest {
 
     @Autowired
     private ProductService productService;
+
+    /**
+     * 테스트 코드도 문서다. before method 는 테스트 코드를 해석하는데 혼돈을 줄 수 있기 때문에 지양하는 것이 좋다.
+     * <p>
+     * 만약 각 테스트를 해석할 때 전혀 몰라도 상관이 없거나,
+     * 데이터를 수정해도 모든 테스트에 아무런 영향을 주지 않는다면 before method 를 사용해도 괜찮다.
+     */
+    @BeforeAll
+    static void beforeAll() {
+    }
+
+    @BeforeEach
+    void setUp() {
+    }
 
     @AfterEach
     void tearDown() {
@@ -82,6 +94,11 @@ class ProductServiceTest {
             );
     }
 
+    /**
+     * 파라미터는 테스트에 직접적인 영향을 주는 것만 남겨두자
+     * <p>
+     * 또한 Fixture 를 만들기 위한 빌더들은 테스트 클래스마다 별도로 두는 것이 좋다.
+     */
     private static Product createProduct(String productNumber, ProductType type, ProductSellingStatus sellingStatus, String name, int price) {
         return Product.builder()
             .productNumber(productNumber)

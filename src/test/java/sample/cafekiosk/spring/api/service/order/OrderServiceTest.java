@@ -48,6 +48,22 @@ class OrderServiceTest {
     @Autowired
     private OrderService orderService;
 
+    /**
+     * deleteAll vs deleteAllInBatch
+     * deleteAll
+     * - 전체 데이터를 조회한 후 반복문을 돌면서 데이터를 건별로 삭제한다. (느림)
+     * - 연관된 엔티티가 있다면 함께 제거한다. (cascade, orphanRemoval)
+     * deleteAllInBatch
+     * - 데이터를 벌크성으로 한번에 제거한다. (빠름)
+     * - 엔티티를 영속성 컨텍스트에 올리지 않고 바로 지운다.
+     * - 연관관계를 무시하고 제거한다.
+     * <p>
+     * 연관된 엔티티 없이 단순히 테이블을 지우고 싶다면 deleteAllInBatch()
+     * 연관된 엔티티도 한께 제거하고 싶다면 deleteAll()
+     * <p>
+     * 테스트 초기화 목적이라면 deleteAllInBatch() 를 사용하는 것이 훨씬 효율적이다.
+     * 테스트에서는 보통 DB 상태만 초기화 하면 되기 때문에 cascade, orphanRemoval 같은 연관 로직까지 작동시킬 필요는 없다.
+     */
     @AfterEach
     void tearDown() {
         orderProductRepository.deleteAllInBatch();
