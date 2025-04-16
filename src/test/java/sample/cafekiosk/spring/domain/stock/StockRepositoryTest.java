@@ -3,15 +3,16 @@ package sample.cafekiosk.spring.domain.stock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.transaction.annotation.Transactional;
+import sample.cafekiosk.spring.IntegrationTestSupport;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-@DataJpaTest
-class StockRepositoryTest {
+@Transactional
+class StockRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private StockRepository stockRepository;
@@ -26,10 +27,10 @@ class StockRepositoryTest {
         List<Stock> stocks = stockRepository.findAllByProductNumberIn(List.of("001", "002"));
 
         assertThat(stocks).hasSize(2)
-                .extracting("productNumber", "quantity")
-                .containsExactlyInAnyOrder(
-                        tuple("001", 2),
-                        tuple("002", 2)
-                );
+            .extracting("productNumber", "quantity")
+            .containsExactlyInAnyOrder(
+                tuple("001", 2),
+                tuple("002", 2)
+            );
     }
 }

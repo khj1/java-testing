@@ -26,26 +26,17 @@ public class ProductService {
     public static final String FIRST_PRODUCT_NUMBER = "001";
 
     private final ProductRepository productRepository;
+    private final ProductNumberFactory productNumberFactory;
 
     // 동시성 이슈
     @Transactional
     public ProductResponse createProduct(ProductCreateServiceRequest request) {
-        String newProductNumber = createProductNumber();
+        String newProductNumber = productNumberFactory.createProductNumber();
 
         Product product = request.toEntity(newProductNumber);
         Product saved = productRepository.save(product);
 
         return ProductResponse.of(saved);
-    }
-
-    private String createProductNumber() {
-        String latestProductNumber = productRepository.findLatestProductNumber();
-        if (latestProductNumber == null) {
-            return FIRST_PRODUCT_NUMBER;
-        }
-        int newProductNumberInt = Integer.parseInt(latestProductNumber) + 1;
-
-        return String.format("%03d", newProductNumberInt);
     }
 
     public List<ProductResponse> getSellingProducts() {
